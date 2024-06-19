@@ -10,11 +10,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
     @Id
@@ -30,7 +33,7 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     @Column(nullable = false, unique = true)
     private String nickname;
@@ -45,4 +48,22 @@ public class User extends BaseTimeEntity {
     private boolean isVerified;
 
     private boolean isBanned;
+
+    public User(String loginId, String password, String nickname) {
+        this.loginId = loginId;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }
