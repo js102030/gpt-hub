@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 가입</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.indigo.min.css"/>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#joinForm').submit(function (event) {
+            event.preventDefault(); // 폼 기본 제출 동작 방지
+
+            var formData = {
+                loginId: $('#loginId').val(),
+                password: $('#password').val(),
+                nickname: $('#nickname').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/users', // 컨트롤러의 @PostMapping 경로
+                contentType: 'application/json', // 요청의 Content-Type을 JSON으로 명시
+                data: JSON.stringify(formData), // 데이터를 JSON 문자열로 변환
+                success: function (response) {
+                    // 회원가입 성공 시 처리 로직
+                    alert('회원가입 성공!');
+                    console.log(response); // 성공 시 응답 로그 출력
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    alert('회원가입 실패: ' + error);
+                }
+            });
+        });
+    });
+</script>
+<body>
+<div th:replace="~{fragment/nav :: top}"></div>
+<main class="container" style="width: 500px;">
+
+    <h1>회원 가입</h1>
+
+    <form id="joinForm">
+        <label for="loginId">ID:</label>
+        <input type="text" id="loginId" name="loginId">
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+
+        <label for="nickname">Nickname:</label>
+        <input type="text" id="nickname" name="nickname">
+
+        <input type="submit" value="Submit">
+    </form>
+
+</main>
+</body>
+
+</html>
