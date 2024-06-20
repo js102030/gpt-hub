@@ -24,7 +24,7 @@ public class UserSearchService {
     }
 
     public User findByLoginId(String loginId) {
-        return userRepository.findByLoginId(loginId)
+        return userRepository.findByLoginIdAndIsDeletedFalseAndIsBannedFalse(loginId)
                 .orElseThrow(
                         () -> new NotFoundException(String.format("로그인 아이디 %s 에 해당하는 유저를 찾을 수 없습니다.", loginId))
                 );
