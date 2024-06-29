@@ -1,8 +1,12 @@
 package com.gpt_hub.domain.user.controller.api;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 
+import com.gpt_hub.domain.user.annotation.LoginUserId;
 import com.gpt_hub.domain.user.dto.SignUpRequest;
+import com.gpt_hub.domain.user.dto.TransferPointsRequest;
 import com.gpt_hub.domain.user.dto.UpdateNicknameDto;
 import com.gpt_hub.domain.user.dto.UpdatePasswordRequest;
 import com.gpt_hub.domain.user.dto.UserResponse;
@@ -11,8 +15,7 @@ import com.gpt_hub.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +25,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -33,66 +38,60 @@ public class UserController {
     private final UserService userService;
     private final UserSearchService userSearchService;
 
+    @ResponseStatus(CREATED)
     @PostMapping("/users")
-    public ResponseEntity<UserResponse> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
-        UserResponse userResponse = userService.signUp(signUpRequest);
-
-        return ResponseEntity
-                .status(CREATED)
-                .body(userResponse);
+    public UserResponse signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
+        return userService.signUp(signUpRequest);
     }
 
+    @ResponseStatus(OK)
     @GetMapping("/users/{userId}")
-    public ResponseEntity<UserResponse> findUser(@PathVariable Long userId) {
-        UserResponse userResponse = userSearchService.findUserResponse(userId);
-
-        return ResponseEntity
-                .ok(userResponse);
+    public UserResponse findUser(@PathVariable Long userId) {
+        return userSearchService.findUserResponse(userId);
     }
 
+    @ResponseStatus(OK)
+    @PatchMapping("/users/transfer-points")
+    public UserResponse transferPoints(@LoginUserId Long loginUserId,
+                                       @RequestBody @Valid TransferPointsRequest request) {
+        return userService.transferPoints(loginUserId, request);
+    }
+
+    @ResponseStatus(OK)
     @PatchMapping("/users/nickname")
-    public ResponseEntity<UserResponse> updateNickname(@AuthenticationPrincipal(expression = "userId") Long userId,
-                                                       @Valid @RequestBody UpdateNicknameDto request) {
-        UserResponse userResponse = userService.updateNickname(userId, request.getNickname());
-
-        return ResponseEntity
-                .ok(userResponse);
+    public UserResponse updateNickname(@LoginUserId Long loginUserId,
+                                       @Valid @RequestBody UpdateNicknameDto request) {
+        return userService.updateNickname(loginUserId, request.getNickname());
     }
 
+    @ResponseStatus(OK)
     @PatchMapping("/users/password")
-    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal(expression = "userId") Long userId,
-                                               @Valid @RequestBody UpdatePasswordRequest request) {
-        userService.updatePassword(userId, request.getPassword());
-
-        return ResponseEntity
-                .ok()
-                .build();
+    public void updatePassword(@LoginUserId Long loginUserId,
+                               @Valid @RequestBody UpdatePasswordRequest request) {
+        userService.updatePassword(loginUserId, request.getPassword());
     }
 
+    @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/users")
-    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal(expression = "userId") Long userId) {
-        userService.delete(userId);
-
-        return ResponseEntity
-                .noContent()
-                .build();
+    public void deleteUser(@LoginUserId Long loginUserId) {
+        userService.delete(loginUserId);
     }
 
+    @ResponseStatus(OK)
     @GetMapping(value = "/loginId-availability")
-    public ResponseEntity<Boolean> checkLoginIdAvailability(@RequestParam @NotBlank String loginId) {
-        return ResponseEntity
-                .ok(userSearchService.existsByLoginId(loginId));
+    public boolean checkLoginIdAvailability(@RequestParam @NotBlank String loginId) {
+        return userSearchService.existsByLoginId(loginId);
     }
 
+    @ResponseStatus(OK)
     @GetMapping(value = "/nickname-availability")
-    public ResponseEntity<Boolean> checkNicknameAvailability(@RequestParam @NotBlank String nickname) {
-        return ResponseEntity
-                .ok(userSearchService.existsByNickName(nickname));
+    public boolean checkNicknameAvailability(@RequestParam @NotBlank String nickname) {
+        return userSearchService.existsByNickName(nickname);
     }
 
+    @ResponseStatus(OK)
     @GetMapping("/email-availability")
-    public ResponseEntity<Boolean> checkEmailAvailability(@RequestParam @NotBlank String email) {
-        return ResponseEntity
-                .ok(userSearchService.existsByEmail(email));
+    public boolean checkEmailAvailability(@RequestParam @NotBlank String email) {
+        return userSearchService.existsByEmail(email);
     }
 }
