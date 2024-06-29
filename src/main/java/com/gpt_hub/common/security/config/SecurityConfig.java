@@ -46,7 +46,7 @@ public class SecurityConfig {
         httpSecurity.
                 authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/", "/login", "/signup", "/api/users")
+                                .requestMatchers("/", "/login", "/signup", "/api/**")
                                 .permitAll()
 
                                 .requestMatchers("/admin/**").hasAnyRole(ADMIN.name())
@@ -54,13 +54,10 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 );
 
-//        httpSecurity.exceptionHandling(auth -> auth
-//                .accessDeniedPage("/access-denied")
-//        );
-
         httpSecurity
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
                         .failureHandler(customAuthenticationFailureHandler())
                 );
 
