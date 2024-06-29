@@ -63,6 +63,10 @@ public class User extends BaseTimeEntity {
         this.password = encodedPassword;
     }
 
+    public void updatePoint(double amount) {
+        this.point = amount;
+    }
+
     public void delete() {
         this.isDeleted = true;
     }
