@@ -8,6 +8,6 @@ public class UserViewController {
 
     @GetMapping("/signup")
     public String join() {
-        return "html/signup";
+        return "signup";
     }
 }
