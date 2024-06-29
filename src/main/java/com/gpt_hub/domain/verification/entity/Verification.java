@@ -1,5 +1,6 @@
 package com.gpt_hub.domain.verification.entity;
 
+import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Verification {
+public class Verification extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

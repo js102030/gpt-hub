@@ -1,5 +1,6 @@
 package com.gpt_hub.domain.comment.entity;
 
+import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.post.entity.Post;
 import com.gpt_hub.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.gpt_hub.domain.like.entity;
 
+import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.comment.entity.Comment;
 import com.gpt_hub.domain.post.entity.Post;
 import com.gpt_hub.domain.user.entity.User;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "likes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Like {
+public class Like extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

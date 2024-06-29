@@ -1,5 +1,6 @@
 package com.gpt_hub.domain.post.entity;
 
+import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.gptdata.entity.GptData;
 import com.gpt_hub.domain.post.enumtype.Forum;
 import com.gpt_hub.domain.user.entity.User;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

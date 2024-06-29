@@ -1,5 +1,6 @@
 package com.gpt_hub.domain.gptdata.entity;
 
+import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.prompt.entity.Prompt;
 import com.gpt_hub.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GptData {
+public class GptData extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +33,11 @@ public class GptData {
     @JoinColumn(name = "prompt_id")
     private Prompt prompt;
 
+    @Lob
     @Column(nullable = false)
     private String question;
 
+    @Lob
     @Column(nullable = false)
     private String answer;
 
@@ -42,4 +46,7 @@ public class GptData {
 
     private boolean isDeleted;
 
+    public void delete() {
+        this.isDeleted = true;
+    }
 }
