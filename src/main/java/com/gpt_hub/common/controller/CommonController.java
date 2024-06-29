@@ -8,12 +8,12 @@ public class CommonController {
 
     @GetMapping("/")
     public String mainP() {
-        return "html/main";
+        return "main";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "html/login";
+        return "login";
     }
-    
+
 }
