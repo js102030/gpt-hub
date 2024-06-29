@@ -5,7 +5,9 @@ import com.gpt_hub.domain.user.dto.UserResponse;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.mapper.UserMapper;
 import com.gpt_hub.domain.user.repository.UserRepository;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,23 +21,24 @@ public class UserSearchService {
     public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(
-                        () -> new NotFoundException(String.format("유저 아이디 %d 에 해당하는 유저를 찾을 수 없습니다.", userId))
+                        () -> new NotFoundException(String.format("UserId %d 에 해당하는 유저를 찾을 수 없습니다.", userId))
                 );
+    }
+
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    public User findByIdWithLock(Long userId) {
+        return findById(userId);
     }
 
     public User findByLoginId(String loginId) {
         return userRepository.findByLoginIdAndIsDeletedFalseAndIsBannedFalse(loginId)
                 .orElseThrow(
-                        () -> new NotFoundException(String.format("로그인 아이디 %s 에 해당하는 유저를 찾을 수 없습니다.", loginId))
+                        () -> new NotFoundException(String.format("LoginId %s 에 해당하는 유저를 찾을 수 없습니다.", loginId))
                 );
     }
 
     public UserResponse findUserResponse(Long userId) {
-        return userRepository.findById(userId)
-                .map(UserMapper.INSTANCE::userToUserResponse)
-                .orElseThrow(
-                        () -> new NotFoundException(String.format("유저 아이디 %d 에 해당하는 유저를 찾을 수 없습니다.", userId))
-                );
+        return UserMapper.INSTANCE.userToUserResponse(findById(userId));
     }
 
     public boolean existsByLoginId(String loginId) {

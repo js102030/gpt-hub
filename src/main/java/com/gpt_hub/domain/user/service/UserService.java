@@ -1,11 +1,14 @@
 package com.gpt_hub.domain.user.service;
 
+import com.gpt_hub.common.exception.custom.NotEnoughPointException;
 import com.gpt_hub.domain.user.dto.SignUpRequest;
+import com.gpt_hub.domain.user.dto.TransferPointsRequest;
 import com.gpt_hub.domain.user.dto.UserResponse;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.mapper.UserMapper;
 import com.gpt_hub.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserSearchService userSearchService;
@@ -53,5 +57,23 @@ public class UserService {
         User findUser = userSearchService.findById(userId);
 
         findUser.delete();
+    }
+
+    public UserResponse transferPoints(Long loginUserId, TransferPointsRequest request) {
+        User fromUser = userSearchService.findByIdWithLock(loginUserId);
+        User toUser = userSearchService.findByIdWithLock(request.getToUserId());
+
+        double fromUserPoint = fromUser.getPoint();
+        double amount = request.getAmount();
+
+        if (fromUserPoint < amount) {
+            throw new NotEnoughPointException("전송할 포인트가 부족합니다.");
+        }
+
+        fromUser.updatePoint(fromUserPoint - amount);
+
+        toUser.updatePoint(toUser.getPoint() + amount);
+
+        return UserMapper.INSTANCE.userToUserResponse(fromUser);
     }
 }
