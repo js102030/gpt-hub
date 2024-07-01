@@ -67,6 +67,11 @@ public class User extends BaseTimeEntity {
         this.point = amount;
     }
 
+    public void verifyEmail(String email) {
+        this.isVerified = true;
+        this.email = email;
+    }
+
     public void delete() {
         this.isDeleted = true;
     }

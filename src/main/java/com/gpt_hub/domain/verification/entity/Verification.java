@@ -36,4 +36,11 @@ public class Verification extends BaseTimeEntity {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date expiryDate;
+
+    public Verification(User user, String verificationCode, Date expiryDate) {
+        this.user = user;
+        this.verificationCode = verificationCode;
+        this.expiryDate = expiryDate;
+    }
+
 }

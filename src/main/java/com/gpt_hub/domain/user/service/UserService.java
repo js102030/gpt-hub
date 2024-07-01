@@ -76,4 +76,10 @@ public class UserService {
 
         return UserMapper.INSTANCE.userToUserResponse(fromUser);
     }
+
+    public void updateVerify(Long userId, String email) {
+        User findUser = userSearchService.findById(userId);
+
+        findUser.verifyEmail(email);
+    }
 }
