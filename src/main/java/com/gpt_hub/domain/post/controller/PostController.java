@@ -21,7 +21,7 @@ public class PostController {
     private final PostSearchService postSearchService;
 
     @PostMapping("/post")
-    public PostResponse createPost(@LoginUserId Long loginUserId, @RequestBody @Valid PostRequest postRequest) {
+    public PostResponse writePost(@LoginUserId Long loginUserId, @RequestBody @Valid PostRequest postRequest) {
         return postService.createPost(loginUserId, postRequest);
     }
 }
