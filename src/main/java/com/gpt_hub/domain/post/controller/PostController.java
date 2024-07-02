@@ -20,7 +20,7 @@ public class PostController {
     private final PostService postService;
     private final PostSearchService postSearchService;
 
-    @PostMapping("/post")
+    @PostMapping("/posts")
     public PostResponse writePost(@LoginUserId Long loginUserId, @RequestBody @Valid PostRequest postRequest) {
         return postService.createPost(loginUserId, postRequest);
     }
