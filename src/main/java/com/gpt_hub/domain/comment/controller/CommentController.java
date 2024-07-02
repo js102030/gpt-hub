@@ -1,5 +1,8 @@
 package com.gpt_hub.domain.comment.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+
 import com.gpt_hub.common.annotation.LoginUserId;
 import com.gpt_hub.domain.comment.dto.CommentRequest;
 import com.gpt_hub.domain.comment.dto.CommentResponse;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,6 +24,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @ResponseStatus(CREATED)
     @PostMapping("/posts/{postId}/comments")
     public CommentResponse writeComment(@LoginUserId Long loginUserId,
                                         @RequestBody @Valid CommentRequest commentRequest,
@@ -27,6 +32,7 @@ public class CommentController {
         return commentService.createComment(loginUserId, postId, commentRequest);
     }
 
+    @ResponseStatus(OK)
     @GetMapping("/admin/comments/{commentId}")
     public CommentResponse adminGetComment(@LoginUserId Long loginUserId, @PathVariable Long commentId) {
         return commentService.findCommentResponseById_ADMIN(commentId, loginUserId);
