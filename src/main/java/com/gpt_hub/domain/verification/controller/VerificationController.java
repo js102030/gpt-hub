@@ -2,7 +2,7 @@ package com.gpt_hub.domain.verification.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import com.gpt_hub.domain.user.annotation.LoginUserId;
+import com.gpt_hub.common.annotation.LoginUserId;
 import com.gpt_hub.domain.verification.dto.VerifyRequest;
 import com.gpt_hub.domain.verification.service.VerificationService;
 import lombok.RequiredArgsConstructor;

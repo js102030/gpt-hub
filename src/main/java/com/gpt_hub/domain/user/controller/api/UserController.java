@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
-import com.gpt_hub.domain.user.annotation.LoginUserId;
+import com.gpt_hub.common.annotation.LoginUserId;
 import com.gpt_hub.domain.user.dto.SignUpRequest;
 import com.gpt_hub.domain.user.dto.TransferPointsRequest;
 import com.gpt_hub.domain.user.dto.UpdateNicknameDto;

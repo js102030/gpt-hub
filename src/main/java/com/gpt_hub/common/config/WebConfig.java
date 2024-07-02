@@ -1,6 +1,6 @@
 package com.gpt_hub.common.config;
 
-import com.gpt_hub.domain.user.annotation.LoginUserIdArgumentResolver;
+import com.gpt_hub.common.annotation.LoginUserIdArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
