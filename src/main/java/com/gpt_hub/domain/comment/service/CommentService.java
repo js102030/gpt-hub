@@ -1,6 +1,5 @@
 package com.gpt_hub.domain.comment.service;
 
-import com.gpt_hub.domain.comment.dto.CommentRequest;
 import com.gpt_hub.domain.comment.dto.CommentResponse;
 import com.gpt_hub.domain.comment.entity.Comment;
 import com.gpt_hub.domain.comment.mapper.CommentMapper;
@@ -23,11 +22,11 @@ public class CommentService {
     private final UserSearchService userSearchService;
     private final PostSearchService postSearchService;
 
-    public CommentResponse createComment(Long loginUserId, Long postId, CommentRequest commentRequest) {
+    public CommentResponse createComment(Long loginUserId, Long postId, String commentBody) {
         User findUser = userSearchService.findById(loginUserId);
         Post findPost = postSearchService.findNotDeletedById(postId);
 
-        Comment newComment = new Comment(findUser, findPost, commentRequest.getBody());
+        Comment newComment = new Comment(findUser, findPost, commentBody);
         Comment savedComment = commentRepository.save(newComment);
 
         return CommentMapper.INSTANCE.commentToCommentResponse(
@@ -40,5 +39,20 @@ public class CommentService {
 
         return CommentMapper.INSTANCE.commentToCommentResponse(
                 findComment, findComment.getId(), loginUserId, findComment.getPost().getId());
+    }
+
+    public CommentResponse updateComment(Long loginUserId, Long commentId, String commentBody) {
+        Comment findComment = commentSearchService.findByIdAndUserId(commentId, loginUserId);
+
+        findComment.updateComment(commentBody);
+
+        return CommentMapper.INSTANCE.commentToCommentResponse(
+                findComment, findComment.getId(), loginUserId, findComment.getPost().getId());
+    }
+
+    public void deleteComment(Long loginUserId, Long commentId) {
+        Comment findComment = commentSearchService.findByIdAndUserId(commentId, loginUserId);
+
+        findComment.delete();
     }
 }

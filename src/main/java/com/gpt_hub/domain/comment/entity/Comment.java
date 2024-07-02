@@ -42,4 +42,12 @@ public class Comment extends BaseTimeEntity {
         this.post = post;
         this.body = body;
     }
+
+    public void updateComment(String commentBody) {
+        this.body = commentBody;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

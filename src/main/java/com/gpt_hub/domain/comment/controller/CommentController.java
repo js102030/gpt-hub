@@ -1,6 +1,7 @@
 package com.gpt_hub.domain.comment.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.gpt_hub.common.annotation.LoginUserId;
@@ -9,7 +10,9 @@ import com.gpt_hub.domain.comment.dto.CommentResponse;
 import com.gpt_hub.domain.comment.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,12 +32,26 @@ public class CommentController {
     public CommentResponse writeComment(@LoginUserId Long loginUserId,
                                         @RequestBody @Valid CommentRequest commentRequest,
                                         @PathVariable Long postId) {
-        return commentService.createComment(loginUserId, postId, commentRequest);
+        return commentService.createComment(loginUserId, postId, commentRequest.getBody());
     }
 
     @ResponseStatus(OK)
     @GetMapping("/admin/comments/{commentId}")
     public CommentResponse adminGetComment(@LoginUserId Long loginUserId, @PathVariable Long commentId) {
         return commentService.findCommentResponseById_ADMIN(commentId, loginUserId);
+    }
+
+    @ResponseStatus(OK)
+    @PatchMapping("/comments/{commentId}")
+    public CommentResponse updateComment(@LoginUserId Long loginUserId,
+                                         @RequestBody @Valid CommentRequest commentRequest,
+                                         @PathVariable Long commentId) {
+        return commentService.updateComment(loginUserId, commentId, commentRequest.getBody());
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/comments/{commentId}")
+    public void deleteComment(@LoginUserId Long loginUserId, @PathVariable Long commentId) {
+        commentService.deleteComment(loginUserId, commentId);
     }
 }
