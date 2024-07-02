@@ -1,4 +1,4 @@
-package com.gpt_hub.domain.gptdata.dto;
+package com.gpt_hub.domain.gptdata.dto.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

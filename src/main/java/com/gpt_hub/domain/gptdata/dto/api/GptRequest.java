@@ -1,4 +1,4 @@
-package com.gpt_hub.domain.gptdata.dto;
+package com.gpt_hub.domain.gptdata.dto.api;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
