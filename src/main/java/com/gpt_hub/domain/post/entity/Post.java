@@ -25,10 +25,11 @@ public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,4 +49,12 @@ public class Post extends BaseTimeEntity {
     private int hits;
 
     private boolean isDeleted;
+
+    public Post(User user, GptData gptData, String title, String body, Forum forum) {
+        this.user = user;
+        this.gptData = gptData;
+        this.title = title;
+        this.body = body;
+        this.forum = forum;
+    }
 }
