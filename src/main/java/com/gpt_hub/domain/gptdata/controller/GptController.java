@@ -24,14 +24,14 @@ public class GptController {
 
     private final GptDataService gptDataService;
 
-    @PostMapping("/gpt")
     @ResponseStatus(OK)
+    @PostMapping("/gpt")
     public GptDataResponse askGpt(@LoginUserId Long loginUserId, @RequestBody @Valid GptQuestion gptQuestion) {
         return gptDataService.askGpt(loginUserId, gptQuestion);
     }
 
-    @DeleteMapping("/gpt/{gptDataId}")
     @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/gpt/{gptDataId}")
     public void deleteGptData(@PathVariable Long gptDataId) {
         gptDataService.deleteGptData(gptDataId);
     }
