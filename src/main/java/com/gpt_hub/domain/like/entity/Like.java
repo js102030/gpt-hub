@@ -1,16 +1,11 @@
 package com.gpt_hub.domain.like.entity;
 
 import com.gpt_hub.common.base.BaseTimeEntity;
-import com.gpt_hub.domain.comment.entity.Comment;
-import com.gpt_hub.domain.post.entity.Post;
-import com.gpt_hub.domain.user.entity.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,16 +21,26 @@ public class Like extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column(nullable = false)
+    private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @Column(nullable = false)
+    private Long commentId;
 
+    public static Like ofComment(Long userId, Long commentId) {
+        Like like = new Like();
+        like.userId = userId;
+        like.commentId = commentId;
+        return like;
+    }
+
+    public static Like ofPost(Long userId, Long postId) {
+        Like like = new Like();
+        like.userId = userId;
+        like.postId = postId;
+        return like;
+    }
 }
