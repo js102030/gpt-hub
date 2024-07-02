@@ -21,6 +21,11 @@ public class PostSearchService {
                 .orElseThrow(() -> new NotFoundException(String.format("PostId %d 에 해당하는 게시글을 찾을 수 없습니다.", postId)));
     }
 
+    public Post findNotDeletedById(Long postId) {
+        return postRepository.findByIdAndIsDeletedFalse(postId)
+                .orElseThrow(() -> new NotFoundException(String.format("PostId %d 에 해당하는 게시글을 찾을 수 없습니다.", postId)));
+    }
+
     public Post findByIdAndUserId(Long postId, Long userId) {
         return postRepository.findByIdAndUserId(postId, userId)
                 .orElseThrow(() -> new NotFoundException(String.format("PostId %d 에 해당하는 게시글을 찾을 수 없습니다.", postId)));

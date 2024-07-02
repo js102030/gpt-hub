@@ -36,4 +36,10 @@ public class Comment extends BaseTimeEntity {
     private String body;
 
     private boolean isDeleted;
+
+    public Comment(User user, Post post, String body) {
+        this.user = user;
+        this.post = post;
+        this.body = body;
+    }
 }
