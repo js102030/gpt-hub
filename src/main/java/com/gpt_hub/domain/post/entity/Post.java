@@ -57,4 +57,17 @@ public class Post extends BaseTimeEntity {
         this.body = body;
         this.forum = forum;
     }
+
+    public void update(String title, String body, Forum forum, GptData findGptData) {
+        this.title = title;
+        this.body = body;
+        this.forum = forum;
+        if (gptData != null) {
+            gptData = findGptData;
+        }
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

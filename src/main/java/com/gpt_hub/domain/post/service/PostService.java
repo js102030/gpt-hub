@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PostService {
 
+    private final PostSearchService postSearchService;
     private final PostRepository postRepository;
     private final UserSearchService userSearchService;
     private final GptDataSearchService gptDataSearchService;
@@ -39,5 +40,28 @@ public class PostService {
         return PostMapper.INSTANCE.postToPostResponse(
                 savedPost, savedPost.getId(), loginUserId, postRequest.getGptDataId()
         );
+    }
+
+    public PostResponse updatePost(Long loginUserId, Long postId, PostRequest postRequest) {
+        Post findPost = postSearchService.findByIdAndUserId(postId, loginUserId);
+
+        GptData findGptData;
+        if (postRequest.getGptDataId() == null) {
+            findGptData = null;
+        } else {
+            findGptData = gptDataSearchService.findById(postRequest.getGptDataId());
+        }
+
+        findPost.update(postRequest.getTitle(), postRequest.getBody(), postRequest.getForum(), findGptData);
+
+        return PostMapper.INSTANCE.postToPostResponse(
+                findPost, postId, loginUserId, postRequest.getGptDataId()
+        );
+    }
+
+    public void deletePost(Long loginUserId, Long postId) {
+        Post findPost = postSearchService.findByIdAndUserId(postId, loginUserId);
+
+        findPost.delete();
     }
 }
