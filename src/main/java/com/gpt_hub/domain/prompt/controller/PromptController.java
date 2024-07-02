@@ -42,7 +42,7 @@ public class PromptController {
 
     @ResponseStatus(OK)
     @GetMapping("/admin/prompts/{promptId}") // 삭제된 프롬프트도 조회
-    public PromptResponse getPrompt(@LoginUserId Long loginUserId, @PathVariable Long promptId) {
+    public PromptResponse adminGetPrompt(@LoginUserId Long loginUserId, @PathVariable Long promptId) {
         return promptSearchService.findByIdAndUserId_ADMIN(promptId, loginUserId);
     }
 
