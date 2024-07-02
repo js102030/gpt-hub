@@ -1,4 +1,4 @@
-package com.gpt_hub.domain.user.annotation;
+package com.gpt_hub.common.annotation;
 
 import com.gpt_hub.common.security.CustomUserDetails;
 import org.springframework.core.MethodParameter;

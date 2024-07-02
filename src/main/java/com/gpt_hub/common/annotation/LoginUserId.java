@@ -1,4 +1,4 @@
-package com.gpt_hub.domain.user.annotation;
+package com.gpt_hub.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
