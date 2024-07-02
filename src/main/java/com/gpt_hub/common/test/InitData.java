@@ -27,16 +27,17 @@ public class InitData {
     public void init() {
         log.info("init()");
 
-        SignUpRequest signUpRequest1 = new SignUpRequest();
-        SignUpRequest signUpRequest2 = new SignUpRequest();
+        SignUpRequest signUpRequest1 = SignUpRequest.builder()
+                .loginId("test1")
+                .password("test1")
+                .nickname("test1")
+                .build();
 
-        signUpRequest1.setLoginId("test1");
-        signUpRequest1.setPassword("test1");
-        signUpRequest1.setNickname("test1");
-
-        signUpRequest2.setLoginId("test2");
-        signUpRequest2.setPassword("test2");
-        signUpRequest2.setNickname("test2");
+        SignUpRequest signUpRequest2 = SignUpRequest.builder()
+                .loginId("test2")
+                .password("test2")
+                .nickname("test2")
+                .build();
 
         UserResponse userResponse1 = userService.signUp(signUpRequest1);
         UserResponse userResponse2 = userService.signUp(signUpRequest2);
