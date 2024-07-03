@@ -9,8 +9,9 @@ import com.gpt_hub.domain.user.service.UserSearchService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -21,17 +22,27 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class PaymentService {
 
     private final String CID_TEST_CODE = "TC0ONETIME";
     private final String KAKAO_PAY_APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
     private final String KAKAO_PAY_CANCEL_URL = "https://open-api.kakaopay.com/online/v1/payment/cancel";
-    private final String SECRET_KEY = "DEVDC99CF1C921E1C2BCCB44D5BE4594F842834A";
+    private final String SECRET_KEY;
 
     private final UserSearchService userSearchService;
     private final PaymentSearchService paymentSearchService;
     private final PaymentRepository paymentRepository;
+
+    @Autowired
+    public PaymentService(@Value("${kakaopay.secret-key}") String SECRET_KEY,
+                          UserSearchService userSearchService,
+                          PaymentSearchService paymentSearchService,
+                          PaymentRepository paymentRepository) {
+        this.SECRET_KEY = SECRET_KEY;
+        this.userSearchService = userSearchService;
+        this.paymentSearchService = paymentSearchService;
+        this.paymentRepository = paymentRepository;
+    }
 
     public KakaoPayReadyResponse readyKakaoPay(Long loginUserId, int amount) {
         User findUser = userSearchService.findById(loginUserId);
