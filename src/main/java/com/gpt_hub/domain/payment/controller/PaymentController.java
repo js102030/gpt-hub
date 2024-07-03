@@ -34,7 +34,7 @@ public class PaymentController {
 
     @ResponseStatus(OK)
     @PatchMapping("/payment/kakaopay/refund/{paymentId}")
-    public void refundKakaoPay(@LoginUserId Long loginUserId, @PathVariable Long paymentId) {
+    public void refundKakaoPay(@LoginUserId Long loginUserId, @PathVariable String paymentId) {
         paymentService.refundKakaoPay(loginUserId, paymentId);
     }
 

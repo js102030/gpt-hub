@@ -8,6 +8,7 @@ import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.service.UserSearchService;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -38,9 +39,11 @@ public class PaymentService {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
+        final String paymentId = UUID.randomUUID().toString().replace("-", "").substring(0, 18);
+
         Map<String, String> params = new HashMap<>();
         params.put("cid", CID_TEST_CODE);
-        params.put("partner_order_id", "임시 주문 번호");
+        params.put("partner_order_id", paymentId); // OrderID를 넣어야 하지만 Order 테이블을 만들지 않을 예정이므로 paymentId로 대체
         params.put("partner_user_id", findUser.getNickname());
         params.put("item_name", "GPT-Hub 포인트");
         params.put("quantity", "1");
@@ -56,7 +59,7 @@ public class PaymentService {
                 "https://open-api.kakaopay.com/online/v1/payment/ready", body,
                 KakaoPayReadyResponse.class);
 
-        Payment newPayment = new Payment(findUser, amount, kakaoPayReadyResponse.getTid());
+        Payment newPayment = new Payment(paymentId, findUser, amount, kakaoPayReadyResponse.getTid());
         paymentRepository.save(newPayment);
         return kakaoPayReadyResponse;
     }
@@ -70,8 +73,8 @@ public class PaymentService {
 
         Map<String, String> params = new HashMap<>();
         params.put("cid", CID_TEST_CODE);
-        params.put("tid", findPayment.getDetails());
-        params.put("partner_order_id", "임시 주문 번호");
+        params.put("tid", findPayment.getDetails()); // OrderID를 넣어야 하지만 Order 테이블을 만들지 않을 예정이므로 paymentId로 대체
+        params.put("partner_order_id", findPayment.getId());
         params.put("partner_user_id", findUser.getNickname());
         params.put("pg_token", pgToken);
 
@@ -84,7 +87,7 @@ public class PaymentService {
         return restTemplate.postForObject(KAKAO_PAY_APPROVE_URL, body, KakaoPayApproveResponse.class);
     }
 
-    public void refundKakaoPay(Long loginUserId, Long paymentId) {
+    public void refundKakaoPay(Long loginUserId, String paymentId) {
         Payment findPayment = paymentSearchService.findByIdAndUserId(paymentId, loginUserId);
 
         RestTemplate restTemplate = new RestTemplate();
