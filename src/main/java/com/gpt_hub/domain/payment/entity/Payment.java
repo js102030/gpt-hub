@@ -33,4 +33,18 @@ public class Payment extends BaseTimeEntity {
     private boolean isPaid;
 
     private boolean isRefunded;
+
+    public Payment(User user, int amount, String details) {
+        this.user = user;
+        this.amount = amount;
+        this.details = details;
+    }
+
+    public void completePayment() {
+        this.isPaid = true;
+    }
+
+    public void refundPayment() {
+        this.isRefunded = true;
+    }
 }

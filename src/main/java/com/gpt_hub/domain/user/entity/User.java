@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String email;
 
-    private double point;
+    private int point;
 
     private boolean isDeleted;
 
@@ -63,8 +63,8 @@ public class User extends BaseTimeEntity {
         this.password = encodedPassword;
     }
 
-    public void updatePoint(double amount) {
-        this.point = amount;
+    public void addPoint(int amount) {
+        this.point += amount;
     }
 
     public void verifyEmail(String email) {

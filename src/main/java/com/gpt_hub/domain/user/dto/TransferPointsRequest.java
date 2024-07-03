@@ -12,5 +12,5 @@ public class TransferPointsRequest {
 
     @NotNull
     @Min(1)
-    private double amount;
+    private int amount;
 }

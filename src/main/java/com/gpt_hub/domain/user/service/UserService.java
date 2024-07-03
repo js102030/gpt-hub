@@ -63,16 +63,16 @@ public class UserService {
         User fromUser = userSearchService.findByIdWithLock(loginUserId);
         User toUser = userSearchService.findByIdWithLock(request.getToUserId());
 
-        double fromUserPoint = fromUser.getPoint();
-        double amount = request.getAmount();
+        int fromUserPoint = fromUser.getPoint();
+        int amount = request.getAmount();
 
         if (fromUserPoint < amount) {
             throw new NotEnoughPointException("전송할 포인트가 부족합니다.");
         }
 
-        fromUser.updatePoint(fromUserPoint - amount);
+        fromUser.addPoint(-amount);
 
-        toUser.updatePoint(toUser.getPoint() + amount);
+        toUser.addPoint(amount);
 
         return UserMapper.INSTANCE.userToUserResponse(fromUser);
     }

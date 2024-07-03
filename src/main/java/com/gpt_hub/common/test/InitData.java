@@ -46,8 +46,8 @@ public class InitData {
         User findUser1 = userSearchService.findById(userResponse1.getId());
         User findUser2 = userSearchService.findById(userResponse2.getId());
         System.out.println("❤️❤️");
-        findUser1.updatePoint(1000);
-        findUser2.updatePoint(1000);
+        findUser1.addPoint(1000);
+        findUser2.addPoint(1000);
         System.out.println("❤️");
     }
 

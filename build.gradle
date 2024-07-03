@@ -46,6 +46,9 @@ dependencies {
     //mail
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.2.4'
 
+    //HttpComponentsClientHttpRequestFactory용 HttpClient5 추가
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.3.1'
+
 }
 
 tasks.named('test') {

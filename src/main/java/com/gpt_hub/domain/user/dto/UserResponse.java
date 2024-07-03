@@ -13,7 +13,7 @@ public class UserResponse {
     private Role role;
     private String nickname;
     private String email;
-    private double point;
+    private int point;
     private boolean isDeleted;
     private boolean isVerified;
     private boolean isBanned;
