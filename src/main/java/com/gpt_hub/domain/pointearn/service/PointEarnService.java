@@ -1,9 +1,11 @@
 package com.gpt_hub.domain.pointearn.service;
 
+import static com.gpt_hub.domain.pointearn.enumtype.ActivityType.LOGIN;
+
 import com.gpt_hub.domain.pointearn.entity.PointEarn;
 import com.gpt_hub.domain.pointearn.enumtype.ActivityType;
 import com.gpt_hub.domain.pointearn.repository.PointEarnRepository;
-import com.gpt_hub.domain.pointpocket.PointPocket;
+import com.gpt_hub.domain.pointpocket.entity.PointPocket;
 import com.gpt_hub.domain.pointpocket.service.PointPocketSearchService;
 import com.gpt_hub.domain.pointpocket.service.PointPocketService;
 import java.util.Optional;
@@ -28,6 +30,10 @@ public class PointEarnService {
         Optional<PointPocket> earningPocketOptional = pointPocketSearchService.findEarningPocketOptional(userId);
         PointPocket pointPocket = earningPocketOptional.orElseGet(
                 () -> pointPocketService.createEarningPointPocket(userId));
+
+        if (activityType == LOGIN && pointEarnRepository.hasLoginEarnLast24Hours(userId)) {
+            return;
+        }
 
         int earnedAmount = calculatePoints(activityType);
         pointPocket.addPoints(earnedAmount);

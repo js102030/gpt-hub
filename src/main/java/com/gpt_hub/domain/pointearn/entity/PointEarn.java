@@ -4,6 +4,8 @@ import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.pointearn.enumtype.ActivityType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +27,7 @@ public class PointEarn extends BaseTimeEntity {
 
     private int amount;
 
+    @Enumerated(EnumType.STRING)
     private ActivityType activityType;
 
     public PointEarn(Long userId, int amount, ActivityType activityType) {
