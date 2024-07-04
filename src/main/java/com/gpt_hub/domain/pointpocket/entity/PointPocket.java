@@ -1,4 +1,4 @@
-package com.gpt_hub.domain.pointpocket;
+package com.gpt_hub.domain.pointpocket.entity;
 
 import com.gpt_hub.common.base.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -26,9 +26,9 @@ public class PointPocket extends BaseTimeEntity {
     @Column(nullable = false)
     private Long userId;
 
-    private Long paymentId; //paymentId가 null 이라면 적립된 포인트. (적립된 포인트만 전송 가능)
+    private String paymentId; //paymentId가 null 이라면 적립된 포인트. (적립된 포인트만 전송 가능)
 
-    public static PointPocket ofPayment(Long userId, Long paymentId) {
+    public static PointPocket ofPayment(Long userId, String paymentId) {
         PointPocket pointPocket = new PointPocket();
         pointPocket.userId = userId;
         pointPocket.paymentId = paymentId;
