@@ -4,6 +4,8 @@ import com.gpt_hub.domain.payment.dto.KakaoPayApproveResponse;
 import com.gpt_hub.domain.payment.dto.KakaoPayReadyResponse;
 import com.gpt_hub.domain.payment.entity.Payment;
 import com.gpt_hub.domain.payment.repository.PaymentRepository;
+import com.gpt_hub.domain.pointpocket.entity.PointPocket;
+import com.gpt_hub.domain.pointpocket.service.PointPocketService;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.service.UserSearchService;
 import java.util.HashMap;
@@ -31,16 +33,17 @@ public class PaymentService {
 
     private final UserSearchService userSearchService;
     private final PaymentSearchService paymentSearchService;
+    private final PointPocketService pointPocketService;
     private final PaymentRepository paymentRepository;
 
     @Autowired
     public PaymentService(@Value("${kakaopay.secret-key}") String SECRET_KEY,
-                          UserSearchService userSearchService,
-                          PaymentSearchService paymentSearchService,
-                          PaymentRepository paymentRepository) {
+                          UserSearchService userSearchService, PaymentSearchService paymentSearchService,
+                          PointPocketService pointPocketService, PaymentRepository paymentRepository) {
         this.SECRET_KEY = SECRET_KEY;
         this.userSearchService = userSearchService;
         this.paymentSearchService = paymentSearchService;
+        this.pointPocketService = pointPocketService;
         this.paymentRepository = paymentRepository;
     }
 
@@ -93,7 +96,10 @@ public class PaymentService {
 
         findPayment.completePayment();
 
-        findUser.addPoint(findPayment.getAmount());
+        PointPocket newPointPocket =
+                pointPocketService.createPaymentPointPocket(findUser.getId(), findPayment.getId());
+
+        newPointPocket.addPoints(findPayment.getAmount());
 
         return restTemplate.postForObject(KAKAO_PAY_APPROVE_URL, body, KakaoPayApproveResponse.class);
     }
