@@ -6,9 +6,8 @@ import com.gpt_hub.domain.pointearn.entity.PointEarn;
 import com.gpt_hub.domain.pointearn.enumtype.ActivityType;
 import com.gpt_hub.domain.pointearn.repository.PointEarnRepository;
 import com.gpt_hub.domain.pointpocket.entity.PointPocket;
-import com.gpt_hub.domain.pointpocket.service.PointPocketSearchService;
 import com.gpt_hub.domain.pointpocket.service.PointPocketService;
-import java.util.Optional;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,19 +23,16 @@ public class PointEarnService {
 
     private final PointEarnRepository pointEarnRepository;
     private final PointPocketService pointPocketService;
-    private final PointPocketSearchService pointPocketSearchService;
 
-    public void earnPoints(ActivityType activityType, Long userId) {
-        Optional<PointPocket> earningPocketOptional = pointPocketSearchService.findEarningPocketOptional(userId);
-        PointPocket pointPocket = earningPocketOptional.orElseGet(
-                () -> pointPocketService.createEarningPointPocket(userId));
+    public void earnPoints(Long userId, ActivityType activityType) {
+        PointPocket pointPocket = pointPocketService.getEarningPocketOrCreate(userId);
 
         if (activityType == LOGIN && pointEarnRepository.hasLoginEarnLast24Hours(userId)) {
             return;
         }
 
         int earnedAmount = calculatePoints(activityType);
-        pointPocket.addPoints(earnedAmount);
+        pointPocket.addPoints(BigDecimal.valueOf(earnedAmount));
 
         PointEarn newPointEarn = new PointEarn(userId, earnedAmount, activityType);
         pointEarnRepository.save(newPointEarn);

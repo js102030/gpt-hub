@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,12 @@ public class GptData extends BaseTimeEntity {
     @Column(nullable = false)
     private String answer;
 
+    private int requestTokenUsage;
+
+    private int responseTokenUsage;
+
+    private BigDecimal pointUsage;
+
     @Column(unique = true)
     private String category;
 
@@ -51,10 +58,14 @@ public class GptData extends BaseTimeEntity {
         this.isDeleted = true;
     }
 
-    public GptData(User user, Prompt prompt, String question, String answer) {
+    public GptData(User user, Prompt prompt, String question, String answer,
+                   int requestTokenUsage, int responseTokenUsage, BigDecimal pointUsage) {
         this.user = user;
         this.prompt = prompt;
         this.question = question;
         this.answer = answer;
+        this.requestTokenUsage = requestTokenUsage;
+        this.responseTokenUsage = responseTokenUsage;
+        this.pointUsage = pointUsage;
     }
 }

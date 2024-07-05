@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import com.gpt_hub.common.annotation.LoginUserId;
 import com.gpt_hub.domain.pointpocket.dto.PointPocketResponse;
 import com.gpt_hub.domain.pointpocket.service.PointPocketSearchService;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +28,7 @@ public class PointPocketController {
 
     @ResponseStatus(OK)
     @GetMapping("/point")
-    public int getTotPoints(@LoginUserId Long loginUserId) {
-        //TODO 처음부터 sum으로 조회 가능하게 수정. 현재 null에 stream을 적용하면 NPE 발생.
-        return pointPocketSearchService.findAllPointPocketsOrNull(loginUserId).stream()
-                .mapToInt(PointPocketResponse::getPoints)
-                .sum();
+    public BigDecimal getTotPoints(@LoginUserId Long loginUserId) {
+        return pointPocketSearchService.findTotalPointsByUserId(loginUserId);
     }
 }
