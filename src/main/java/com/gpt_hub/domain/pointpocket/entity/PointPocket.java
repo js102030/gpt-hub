@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,8 @@ public class PointPocket extends BaseTimeEntity {
     @Column(name = "point_pocket_id")
     private Long id;
 
-    @Column(nullable = false)
-    private int points = 0;
+    @Column(precision = 15, scale = 5, nullable = false)
+    private BigDecimal points = BigDecimal.ZERO;
 
     @Column(nullable = false)
     private Long userId;
@@ -41,7 +42,11 @@ public class PointPocket extends BaseTimeEntity {
         return pointPocket;
     }
 
-    public void addPoints(int amount) {
-        this.points += amount;
+    public void addPoints(BigDecimal amount) {
+        this.points = this.points.add(amount);
+    }
+
+    public void refundPoints() {
+        this.points = BigDecimal.ZERO;
     }
 }
