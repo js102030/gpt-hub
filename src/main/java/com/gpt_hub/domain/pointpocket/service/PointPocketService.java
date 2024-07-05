@@ -13,12 +13,30 @@ public class PointPocketService {
 
     private final PointPocketRepository pointPocketRepository;
 
-    public PointPocket createEarningPointPocket(Long userId) {
+    public PointPocket getEarningPocketOrCreate(Long userId) {
+        return pointPocketRepository.findByUserIdAndPaymentIdIsNull(userId).orElseGet(
+                () -> {
+                    PointPocket pointPocket = createEarningPointPocket(userId);
+                    return pointPocketRepository.save(pointPocket);
+                }
+        );
+    }
+
+    public PointPocket getEarningPocketOrCreate_LOCK(Long userId) {
+        return pointPocketRepository.findByUserIdAndPaymentIdIsNull_LOCK(userId).orElseGet(
+                () -> {
+                    PointPocket pointPocket = createEarningPointPocket(userId);
+                    pointPocketRepository.save(pointPocket);
+                    return pointPocketRepository.findByUserIdAndPaymentIdIsNull_LOCK(userId).get();
+                });
+    }
+
+    private PointPocket createEarningPointPocket(Long userId) { // private
         PointPocket newPointPocket = PointPocket.ofEarn(userId);
         return pointPocketRepository.save(newPointPocket);
     }
 
-    public PointPocket createPaymentPointPocket(Long userId, String paymentId) {
+    public PointPocket createPaymentPointPocket(Long userId, String paymentId) { // public
         PointPocket newPointPocket = PointPocket.ofPayment(userId, paymentId);
         return pointPocketRepository.save(newPointPocket);
     }
