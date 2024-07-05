@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.gpt_hub.common.annotation.LoginUserId;
 import com.gpt_hub.domain.user.dto.SignUpRequest;
-import com.gpt_hub.domain.user.dto.TransferPointsRequest;
 import com.gpt_hub.domain.user.dto.UpdateNicknameDto;
 import com.gpt_hub.domain.user.dto.UpdatePasswordRequest;
 import com.gpt_hub.domain.user.dto.UserResponse;
@@ -46,13 +45,6 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public UserResponse findUser(@PathVariable Long userId) {
         return userSearchService.findUserResponse(userId);
-    }
-
-    @ResponseStatus(OK)
-    @PatchMapping("/users/transfer-points")
-    public UserResponse transferPoints(@LoginUserId Long loginUserId,
-                                       @RequestBody @Valid TransferPointsRequest request) {
-        return userService.transferPoints(loginUserId, request);
     }
 
     @ResponseStatus(OK)

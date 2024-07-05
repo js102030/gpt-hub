@@ -5,9 +5,7 @@ import com.gpt_hub.domain.user.dto.UserResponse;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.mapper.UserMapper;
 import com.gpt_hub.domain.user.repository.UserRepository;
-import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +21,6 @@ public class UserSearchService {
                 .orElseThrow(
                         () -> new NotFoundException(String.format("UserId %d 에 해당하는 유저를 찾을 수 없습니다.", userId))
                 );
-    }
-
-    @Lock(LockModeType.PESSIMISTIC_READ)
-    public User findByIdWithLock(Long userId) {
-        return findById(userId);
     }
 
     public User findByLoginId(String loginId) {

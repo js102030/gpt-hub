@@ -1,14 +1,18 @@
 package com.gpt_hub.domain.comment.service;
 
+import static com.gpt_hub.domain.pointearn.enumtype.ActivityType.COMMENT;
+
 import com.gpt_hub.domain.comment.dto.CommentResponse;
 import com.gpt_hub.domain.comment.entity.Comment;
 import com.gpt_hub.domain.comment.mapper.CommentMapper;
 import com.gpt_hub.domain.comment.repository.CommentRepository;
+import com.gpt_hub.domain.pointearn.event.UserActionEvent;
 import com.gpt_hub.domain.post.entity.Post;
 import com.gpt_hub.domain.post.service.PostSearchService;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.service.UserSearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ public class CommentService {
     private final CommentSearchService commentSearchService;
     private final UserSearchService userSearchService;
     private final PostSearchService postSearchService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public CommentResponse createComment(Long loginUserId, Long postId, String commentBody) {
         User findUser = userSearchService.findById(loginUserId);
@@ -28,6 +33,8 @@ public class CommentService {
 
         Comment newComment = new Comment(findUser, findPost, commentBody);
         Comment savedComment = commentRepository.save(newComment);
+
+        eventPublisher.publishEvent(new UserActionEvent(this, findUser.getId(), COMMENT));
 
         return CommentMapper.INSTANCE.commentToCommentResponse(
                 savedComment, savedComment.getId(), loginUserId, postId

@@ -4,8 +4,6 @@ import com.gpt_hub.common.base.BaseTimeEntity;
 import com.gpt_hub.domain.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,8 +17,7 @@ import lombok.NoArgsConstructor;
 public class Payment extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,7 +31,8 @@ public class Payment extends BaseTimeEntity {
 
     private boolean isRefunded;
 
-    public Payment(User user, int amount, String details) {
+    public Payment(String id, User user, int amount, String details) {
+        this.id = id;
         this.user = user;
         this.amount = amount;
         this.details = details;

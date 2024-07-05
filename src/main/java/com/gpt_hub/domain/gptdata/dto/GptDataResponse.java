@@ -1,5 +1,6 @@
 package com.gpt_hub.domain.gptdata.dto;
 
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,5 +15,8 @@ public class GptDataResponse {
     private String answer;
     private String category;
     private boolean isDeleted;
+    private int requestTokenUsage;
+    private int responseTokenUsage;
+    private BigDecimal pointUsage;
 
 }

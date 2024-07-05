@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    Optional<Payment> findByIdAndUserId(Long paymentId, Long userId);
+    Optional<Payment> findByIdAndUserId(String paymentId, Long userId);
 
     Optional<Payment> findTopByUserIdAndIsPaidFalseOrderByCreatedDateDesc(Long userId);
 }

@@ -1,8 +1,6 @@
 package com.gpt_hub.domain.user.service;
 
-import com.gpt_hub.common.exception.custom.NotEnoughPointException;
 import com.gpt_hub.domain.user.dto.SignUpRequest;
-import com.gpt_hub.domain.user.dto.TransferPointsRequest;
 import com.gpt_hub.domain.user.dto.UserResponse;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.mapper.UserMapper;
@@ -57,24 +55,6 @@ public class UserService {
         User findUser = userSearchService.findById(userId);
 
         findUser.delete();
-    }
-
-    public UserResponse transferPoints(Long loginUserId, TransferPointsRequest request) {
-        User fromUser = userSearchService.findByIdWithLock(loginUserId);
-        User toUser = userSearchService.findByIdWithLock(request.getToUserId());
-
-        int fromUserPoint = fromUser.getPoint();
-        int amount = request.getAmount();
-
-        if (fromUserPoint < amount) {
-            throw new NotEnoughPointException("전송할 포인트가 부족합니다.");
-        }
-
-        fromUser.addPoint(-amount);
-
-        toUser.addPoint(amount);
-
-        return UserMapper.INSTANCE.userToUserResponse(fromUser);
     }
 
     public void updateVerify(Long userId, String email) {

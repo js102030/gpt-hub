@@ -1,7 +1,10 @@
 package com.gpt_hub.domain.post.service;
 
+import static com.gpt_hub.domain.pointearn.enumtype.ActivityType.POST;
+
 import com.gpt_hub.domain.gptdata.entity.GptData;
 import com.gpt_hub.domain.gptdata.service.GptDataSearchService;
+import com.gpt_hub.domain.pointearn.event.UserActionEvent;
 import com.gpt_hub.domain.post.dto.PostRequest;
 import com.gpt_hub.domain.post.dto.PostResponse;
 import com.gpt_hub.domain.post.entity.Post;
@@ -10,6 +13,7 @@ import com.gpt_hub.domain.post.repository.PostRepository;
 import com.gpt_hub.domain.user.entity.User;
 import com.gpt_hub.domain.user.service.UserSearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserSearchService userSearchService;
     private final GptDataSearchService gptDataSearchService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public PostResponse createPost(Long loginUserId, PostRequest postRequest) {
         User findUser = userSearchService.findById(loginUserId);
@@ -36,6 +41,8 @@ public class PostService {
         );
 
         Post savedPost = postRepository.save(newPost);
+
+        eventPublisher.publishEvent(new UserActionEvent(this, findUser.getId(), POST));
 
         return PostMapper.INSTANCE.postToPostResponse(
                 savedPost, savedPost.getId(), loginUserId, postRequest.getGptDataId()

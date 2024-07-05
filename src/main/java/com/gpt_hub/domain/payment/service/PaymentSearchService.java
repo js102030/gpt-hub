@@ -14,7 +14,7 @@ public class PaymentSearchService {
 
     private PaymentRepository paymentRepository;
 
-    public Payment findByIdAndUserId(Long paymentId, Long userId) {
+    public Payment findByIdAndUserId(String paymentId, Long userId) {
         return paymentRepository.findByIdAndUserId(paymentId, userId)
                 .orElseThrow(() -> new NotFoundException("결제 정보가 없습니다."));
     }

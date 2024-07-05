@@ -24,6 +24,7 @@ public class Verification extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "verification_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
