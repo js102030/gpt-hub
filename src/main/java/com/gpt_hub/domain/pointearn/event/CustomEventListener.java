@@ -15,6 +15,6 @@ public class CustomEventListener {
     @Transactional
     @EventListener
     public void handleUserAction(UserActionEvent event) {
-        pointEarnService.earnPoints(event.getActivityType(), event.getUserId());
+        pointEarnService.earnPoints(event.getUserId(), event.getActivityType());
     }
 }
