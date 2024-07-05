@@ -11,14 +11,22 @@ import lombok.NoArgsConstructor;
 public class GptResponse {
 
     private List<Choice> choices;
+    private Usage usage;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Choice {
-
         private int index;
         private Message message;
+    }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Usage {
+        private int prompt_tokens;
+        private int completion_tokens;
+        private int total_tokens;
     }
 }
